@@ -1,0 +1,127 @@
+﻿SUBMIT IN SEPERATE FILE:
+* Home Page 
+* Login Page 
+* CRUD Set (create user, view user, update user details, delete user)
+1. USE CASE MODEL (note: admin can also complete all user activities)
+  
+
+
+
+2. WIRE FRAME DIAGRAMS (some are complete through website but not all)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Update personal information 
+  
+
+Purchase products: 
+
+
+  
+
+
+
+Create account:
+  
+
+
+
+Delete account
+  
+
+
+
+Login:
+  
+
+
+
+Search for products:
+  
+
+
+
+Track shipping info:
+  
+
+
+
+Returns:
+  
+
+
+
+
+
+
+
+
+
+Track customer info:
+  
+
+
+
+Track customer payment:
+  
+
+
+
+Add products:
+  
+
+
+
+Track reports:
+  
+
+
+
+Check inventory:
+  
+
+
+
+
+
+3. SITE MAP  
+
+
+4. ERD
+  
+
+
+
+
+
+ETHICS AND CRITICAL THINKING
+In developing the front-end pages for our application, incorporating ethics and critical thinking is crucial to ensure that our design choices reflect a commitment to user respect and transparency. This approach begins with the thoughtful consideration of user privacy, ensuring that personal information is collected, stored, and utilized with the utmost care and consent. We apply critical thinking to create interfaces that are not only intuitive and user-friendly but also accessible to a diverse range of users, including those with disabilities. This involves adhering to best practices in web accessibility, such as providing text alternatives for non-text content and ensuring navigability for keyboard users. Ethical considerations extend to how we present information and choices to our users, avoiding dark patterns that might manipulate or trick users into actions they didn’t intend. By fostering an environment of trust and respect through ethical design practices, we aim to enhance the overall user experience, encouraging users to engage with our application positively and confidently.

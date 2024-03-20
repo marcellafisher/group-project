@@ -1,0 +1,87 @@
+/* styles.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #333;
+    color: white;
+    padding: 1px 0; /* Reduced padding */
+    text-align: center;
+    font-size: 10px; /* Reduced font size */
+}
+
+#footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#contact-footer, #copyright {
+    flex: 1;
+    padding: 0 10px;
+}
+
+/* Updated styles for the navigation bar */
+body {
+    margin: 0;
+}
+
+header {
+    background-color: #333;
+    padding: 10px;
+    text-align: center;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 14px; /* Adjust the font size as needed */
+    font-weight: bold;
+}
+
+#navbar-logo {
+    font-size: 1.5rem;
+}
+
+footer {
+    background-color: #333;
+    padding: 10px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+#footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#contact-footer h2,
+#contact-footer p {
+    color: #fff; /* Set text color to white */
+    margin: 0;
+}
+
+#copyright p {
+    color: #fff; /* Set text color to white */
+    margin: 0;
+}
+
+
+

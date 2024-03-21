@@ -1,40 +1,37 @@
 <?php
+$page_roles = array('admin');
+
 // Include the database connection file
 require_once 'login.php';
-
-// Connect to the database
-$conn = new mysqli($hn, $un, $pw, $db);
-if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
+require_once 'checksession.php';
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collect form data
-    $username = $_POST['username'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash the password
-    $forename = $_POST['forename'];
-    $surname = $_POST['surname'];
-    $shirtSize = $_POST['shirt_size'];
-    $pantSize = $_POST['pant_size'];
-    $shoeSize = $_POST['shoe_size'];
-    $address = $_POST['address'];
+    $category = $_POST['category'];
+    $name = $_POST['name'];
+    $size = $_POST['size'];
+    $color = $_POST['color'];
+    $price = $_POST['price'];
 
-    // For project, not HW 3 Prepare and execute SQL query to insert user data into the database
-     $query = "INSERT INTO users (username, password, forename, surname, shirt_size, pant_size, shoe_size, address) 
-              VALUES ('$username', '$password', '$forename', '$surname', '$shirt_size', '$pant_size', '$shoe_size', '$address')";
-    
+    // Prepare and execute SQL query to insert product data into the database
+    $query = "INSERT INTO products (category, name, size, color, price) 
+              VALUES ('$category', '$name', '$size', '$color', '$price')";
 
-    
     $result = $conn->query($query);
 
     // Check if insertion was successful
     if ($result) {
-        // Redirect back to user-list.php after adding the customer
-        header("Location: user-list.php");
+        // Redirect back to order.php after adding the product
+        header("Location: order.php");
         exit();
     } else {
         echo "Error: " . $query . "<br>" . $conn->error;
     }
 }
+
+// Close the database connection
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -43,11 +40,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suburban Outfitters - Add Customer</title>
+    <title>Suburban Outfitters - Add Product</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
-            background: url('BWcity.jpeg') no-repeat center center fixed;
+            background: url('concrete.avif') no-repeat center center fixed;
             background-size: cover;
             margin: 0;
         }
@@ -115,6 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             text-decoration: none;
         }
     </style>
+
 </head>
 
 <body>
@@ -131,24 +129,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </header>
 
     <div id="user-add-container">
-        <h1>Suburban Outfitters - Add Customer</h1>
-        <!-- Your user addition form here -->
+        <h1>Suburban Outfitters - Add Product</h1>
+        <!-- Form for adding product -->
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-            <!-- Include customer addition form fields -->
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <input type="text" name="forename" placeholder="Forename" required>
-            <input type="text" name="surname" placeholder="Surname" required>
-            <input type="text" name="shirt_size" placeholder="Shirt Size">
-            <input type="text" name="pant_size" placeholder="Pant Size">
-            <input type="text" name="shoe_size" placeholder="Shoe Size">
-            <input type="text" name="address" placeholder="Address" required>
-            <button type="submit">Add Customer</button>
+            <label for="category">Category:</label>
+            <input type="text" id="category" name="category" placeholder="Category" required>
+
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" placeholder="Name" required>
+
+            <label for="size">Size:</label>
+            <input type="text" id="size" name="size" placeholder="Size">
+
+            <label for="color">Color:</label>
+            <input type="text" id="color" name="color" placeholder="Color">
+
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" placeholder="Price" required>
+
+            <button type="submit">Add Product</button>
         </form>
-        <a href="user-list.php">Cancel</a>
+        <a href="order.php">Cancel</a>
     </div>
 
-    <!-- Footer Section -->
     <footer>
         <div id="footer-container">
             <div id="contact-footer">

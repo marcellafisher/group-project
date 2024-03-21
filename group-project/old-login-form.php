@@ -1,39 +1,44 @@
 <?php
-// Include the database connection file
-require_once 'login.php';
+session_start();
 
-// Connect to the database
-$conn = new mysqli($hn, $un, $pw, $db);
-if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
+// Check if user is already logged in, redirect if true
+if(isset($_SESSION['user'])) {
+    header("Location: user-list.php");
+    exit();
+}
 
-// Check if the form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Collect form data
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Include the database connection file
+    require_once 'login.php';
+
+    // Get username and password from the form
     $username = $_POST['username'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash the password
-    $forename = $_POST['forename'];
-    $surname = $_POST['surname'];
-    $shirtSize = $_POST['shirt_size'];
-    $pantSize = $_POST['pant_size'];
-    $shoeSize = $_POST['shoe_size'];
-    $address = $_POST['address'];
+    $password = $_POST['password'];
 
-    // For project, not HW 3 Prepare and execute SQL query to insert user data into the database
-     $query = "INSERT INTO users (username, password, forename, surname, shirt_size, pant_size, shoe_size, address) 
-              VALUES ('$username', '$password', '$forename', '$surname', '$shirt_size', '$pant_size', '$shoe_size', '$address')";
-    
-
-    
+    // SQL query to fetch user data from database
+    $query = "SELECT * FROM users WHERE username='$username'";
     $result = $conn->query($query);
 
-    // Check if insertion was successful
-    if ($result) {
-        // Redirect back to user-list.php after adding the customer
-        header("Location: user-list.php");
-        exit();
+    if($result->num_rows == 1) {
+        $row = $result->fetch_assoc();
+        // Verify the password
+        if(password_verify($password, $row['password'])) {
+            // Authentication successful, set user session
+            $_SESSION['user'] = $row['username'];
+            $_SESSION['role'] = $row['role']; // Assuming you have 'role' column in users table
+            header("Location: about.php");
+            exit();
+        } else {
+            // Incorrect password
+            $error = "Invalid username or password";
+        }
     } else {
-        echo "Error: " . $query . "<br>" . $conn->error;
+        // User not found
+        $error = "Invalid username or password";
     }
+
+    // Close the database connection
+    $conn->close();
 }
 ?>
 
@@ -43,11 +48,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suburban Outfitters - Add Customer</title>
+    <title>Suburban Outfitters - Login</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
+   
+          <style>
         body {
-            background: url('BWcity.jpeg') no-repeat center center fixed;
+            background: url('graffiti.jpeg') no-repeat center center fixed;
             background-size: cover;
             margin: 0;
         }
@@ -77,14 +83,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-size: 1.5rem;
         }
 
-        #user-add-container {
+        #login-container {
             background-color: rgba(255, 255, 255, 0.8);
-            padding: 20px;
+            padding: 10px 20px; /* Reduced padding */
             border-radius: 10px;
-            width: 300px;
+            width: 350px; /* Keep width as it is */
             text-align: center;
             margin: auto; /* Center the container */
-            margin-top: 20px; /* Adjust the top margin as needed */
+            margin-top: 20px; /* Add space between navbar and container */
         }
 
         form {
@@ -110,18 +116,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         a {
             color: #333;
+            text-decoration: none;
             display: block;
             margin-top: 10px;
-            text-decoration: none;
         }
+
     </style>
+    
 </head>
 
 <body>
     <header>
         <nav>
             <a href="about.php">About</a>
-            <a href="authenticate.php">Login</a>
+            <a href="login-form.php">Login</a>
             <a href="user-list.php">User List</a>
             <a href="user-add.php">Add Customer</a>
             <a href="order.php">Shopping</a>
@@ -130,25 +138,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </nav>
     </header>
 
-    <div id="user-add-container">
-        <h1>Suburban Outfitters - Add Customer</h1>
-        <!-- Your user addition form here -->
+    <div id="login-container">
+        <h1>Welcome to Suburban Outfitters</h1>
+        <h2>Login</h2>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-            <!-- Include customer addition form fields -->
             <input type="text" name="username" placeholder="Username" required>
             <input type="password" name="password" placeholder="Password" required>
-            <input type="text" name="forename" placeholder="Forename" required>
-            <input type="text" name="surname" placeholder="Surname" required>
-            <input type="text" name="shirt_size" placeholder="Shirt Size">
-            <input type="text" name="pant_size" placeholder="Pant Size">
-            <input type="text" name="shoe_size" placeholder="Shoe Size">
-            <input type="text" name="address" placeholder="Address" required>
-            <button type="submit">Add Customer</button>
+            <button type="submit">Login</button>
         </form>
-        <a href="user-list.php">Cancel</a>
+        <!-- Add any error message display here -->
+        <?php if(isset($error)) { ?>
+            <p><?php echo $error; ?></p>
+        <?php } ?>
+        <!-- Additional links -->
+        <a href="user-list.php">Continue as Guest</a>
+        <p>Need to edit user details? <a href="edituser.php">Press here</a>.</p>
+        <p>Delete your account? <a href="delete-user.php">Press here</a>.</p>
     </div>
 
-    <!-- Footer Section -->
     <footer>
         <div id="footer-container">
             <div id="contact-footer">
@@ -164,4 +171,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </body>
 
 </html>
-

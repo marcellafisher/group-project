@@ -1,27 +1,33 @@
+<?php
+
+$page_roles=array('admin');
+
+
+// Include the database connection file
+require_once 'login.php';
+require_once 'checksession.php';
+
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Return - Suburban Outfitters</title>
+    <title>Suburban Outfitters - Delete Product</title>
     <link rel="stylesheet" href="styles.css">
+
     <style>
         body {
-            background: url('ppl.jpeg') no-repeat center center fixed;
+            background: url('concrete.avif') no-repeat center center fixed;
             background-size: cover;
             margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
         }
 
         header {
             background-color: #333;
             padding: 10px;
             text-align: center;
-            width: 100%;
         }
 
         nav {
@@ -29,14 +35,13 @@
             justify-content: space-between;
             align-items: center;
             padding: 5px;
-            width: 100%;
         }
 
         nav a {
             color: #fff;
             text-decoration: none;
             margin: 0 10px;
-            font-size: 14px;
+            font-size: 14px; /* Adjust the font size as needed */
             font-weight: bold;
         }
 
@@ -44,20 +49,18 @@
             font-size: 1.5rem;
         }
 
-        #view-return-container {
+        #delete-user-container {
             background-color: rgba(255, 255, 255, 0.8);
             padding: 20px;
             border-radius: 10px;
+            width: 300px;
             text-align: center;
-            margin: 20px auto;
-            max-width: 300px;
+            margin: auto; /* Center the container */
+            margin-top: 20px; /* Add space between navbar and container */
         }
 
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            box-sizing: border-box;
+        form {
+            margin-top: 20px;
         }
 
         button {
@@ -88,47 +91,41 @@
             <a href="user-add.php">Add Customer</a>
             <a href="order.php">Shopping</a>
             <a href="return.php">Return</a>
+            <!-- Add more links as needed for other pages -->
         </nav>
     </header>
 
-    <div id="view-return-container">
-        <h1>View Return</h1>
-        <form action="view-return2.php" method="get"> <!-- Change method to "get" -->
-            <label for="return_id">Select Return ID:</label>
-            <select name="return_id" id="return_id" required>
-                <option value="">Select a Return</option>
-                <?php
-                // Include the database connection file
-                require_once 'login.php';
+ <div id="delete-product-container">
+        <h1>Delete Product</h1>
+        <p>Select the product to delete:</p>
+        <!-- Form for deleting product -->
+        <form action="process-delete-product.php" method="post">
+            <?php
+            // Include the database connection file
+            require_once 'login.php';
 
-                // Connect to the database
-                $conn = new mysqli($hn, $un, $pw, $db);
-                if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
+            // Fetch products from the database
+            $query = "SELECT product_id, name FROM products";
+            $result = $conn->query($query);
 
-                // Retrieve return IDs from the database
-                $query = "SELECT return_id FROM returns";
-                $result = $conn->query($query);
-
-                // Output options for each return ID
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<option value='{$row["return_id"]}'>{$row["return_id"]}</option>";
-                    }
-                } else {
-                    echo "<option value=''>No returns found</option>";
+            // Check if products are found
+            if ($result->num_rows > 0) {
+                // Output radio buttons for each product
+                while ($row = $result->fetch_assoc()) {
+                    echo "<label for='product_" . $row['product_id'] . "'>" . $row['name'] . "</label>";
+                    echo "<input type='radio' id='product_" . $row['product_id'] . "' name='product_id' value='" . $row['product_id'] . "'><br>";
                 }
-
-                // Close the database connection
-                $conn->close();
-                ?>
-            </select>
-            <button type="submit">View Details</button>
+            } else {
+                echo "<p>No products found</p>";
+            }
+            ?>
+            <button type="submit" name="delete">Delete Product</button>
         </form>
-        <a href="return.php">Back to Returns</a>
+        <a href="order.php">Cancel</a>
     </div>
+
     
-    <footer>
-        <div id="footer-container">
+        <footer>        <div id="footer-container">
             <div id="contact-footer">
                 <h2>Contact Us</h2>
                 <p>Email: info@suburbanoutfitters.com</p>
@@ -142,5 +139,4 @@
 </body>
 
 </html>
-
 

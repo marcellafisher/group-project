@@ -1,3 +1,36 @@
+<?php
+// Include the database connection file
+require_once 'login.php';
+
+// Connect to the database
+$conn = new mysqli($hn, $un, $pw, $db);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Check if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Collect form data
+    $returnDate = $_POST['returnDate'];
+    $returnQuantity = $_POST['returnQuantity'];
+    $orderID = $_POST['orderID'];
+
+    // Prepare and execute SQL query to insert return data into the database
+    $query = "INSERT INTO returns (order_id, date, quantity) VALUES ('$orderID', '$returnDate', '$returnQuantity')";
+    $result = $conn->query($query);
+
+    // Check if insertion was successful
+    if ($result) {
+        echo "<p>Return submitted successfully.</p>";
+    } else {
+        echo "<p>Error: " . $query . "<br>" . $conn->error . "</p>";
+    }
+}
+
+// Close database connection
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -108,8 +141,8 @@
             <label for="return-quantity">Quantity:</label>
             <input type="number" id="return-quantity" name="returnQuantity" required>
 
-            <label for="return-item">Item:</label>
-            <input type="text" id="return-item" name="returnItem" required>
+            <label for="order-id">Order ID:</label>
+            <input type="text" id="order-id" name="orderID" placeholder="Enter Order ID" required>
 
             <button type="submit">Submit Return</button>
         </form>
@@ -133,5 +166,4 @@
 </body>
 
 </html>
-
 

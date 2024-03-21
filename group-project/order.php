@@ -88,7 +88,7 @@
     <header>
         <nav>
             <a href="about.php">About</a>
-            <a href="login-form.php">Login</a>
+            <a href="authenticate.php">Login</a>
             <a href="user-list.php">User List</a>
             <a href="user-add.php">Add Customer</a>
             <a href="order.php">Shopping</a>
@@ -98,7 +98,7 @@
 
     <div id="product-create-container">
         <h1>Create New Order</h1>
-        <form action="process-order.php" method="post">
+        <form action="view-product.php" method="post">
             <label for="product-category">Choose a Product Category:</label>
             <select id="product-category" name="productCategory" required>
                 <option value="pants">Pants</option>
@@ -109,9 +109,9 @@
             <!-- Additional form fields based on the selected category -->
             <!-- ... -->
 
-            <button type="submit">Place Order</button>
+            <button type="submit">View Product</button>
         </form>
-        <a href="user-list.php">Back to User List</a>
+        <a href="about.php">Back to About</a>
     </div>
     
     <footer>

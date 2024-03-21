@@ -1,6 +1,11 @@
 <?php
+
+$page_roles=array('admin');
+
+
 // Include the database connection file
 require_once 'login.php';
+require_once 'checksession.php';
 
 // Connect to the database
 $conn = new mysqli($hn, $un, $pw, $db);
@@ -81,7 +86,7 @@ $result = $conn->query($query);
     <header>
         <nav>
             <a href="about.php">About</a>
-            <a href="login-form.php">Login</a>
+            <a href="authenticate.php">Login</a>
             <a href="user-list.php">User List</a>
             <a href="user-add.php">Add Customer</a>
             <a href="order.php">Shopping</a>

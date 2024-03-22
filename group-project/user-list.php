@@ -2,28 +2,21 @@
 
 $page_roles=array('admin');
 
-
 // Include the database connection file
 require_once 'login.php';
 require_once 'checksession.php';
 
-// Connect to the database
 $conn = new mysqli($hn, $un, $pw, $db);
-if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
+if ($conn->connect_error) die($conn->connect_error);
 
-// Execute SQL query to retrieve user data
-$query = "SELECT * FROM users"; // Adjust this query according to your database schema
-$result = $conn->query($query);
-
-?>
-
+echo <<<_END
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suburban Outfitters - User List</title>
+    <title>User List - Suburban Outfitters</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
@@ -49,12 +42,8 @@ $result = $conn->query($query);
             color: #fff;
             text-decoration: none;
             margin: 0 10px;
-            font-size: 14px; /* Adjust the font size as needed */
+            font-size: 14px;
             font-weight: bold;
-        }
-
-        #navbar-logo {
-            font-size: 1.5rem;
         }
 
         #user-list-container {
@@ -62,22 +51,52 @@ $result = $conn->query($query);
             padding: 20px;
             border-radius: 10px;
             text-align: center;
-            margin: 20px auto; /* Centered the container */
-            max-width: 300px; /* Set a maximum width */
+            margin: 20px auto;
+            max-width: 600px;
         }
 
-        a {
+        .user-name {
+            margin-bottom: 20px;
+        }
+
+        .user-name a {
             color: #333;
-            display: block;
-            margin: 10px 0;
             text-decoration: none;
         }
 
-        select {
-            width: 100%;
+        .user-name a:hover {
+            text-decoration: underline;
+        }
+
+        form {
+            display: inline;
+        }
+
+        input[type="submit"] {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #555;
+        }
+
+        #admin-options {
+            position: fixed;
+            bottom: 70px; /* Adjust this value to move the box up or down */
+            right: 20px; /* Adjust this value to move the box left or right */
+            background-color: rgba(255, 255, 255, 0.8);
             padding: 10px;
-            margin-bottom: 20px;
-            box-sizing: border-box;
+            border-radius: 5px;
+        }
+
+        #admin-options a {
+            display: block;
+            margin-bottom: 5px;
         }
     </style>
 </head>
@@ -88,36 +107,45 @@ $result = $conn->query($query);
             <a href="about.php">About</a>
             <a href="authenticate.php">Login</a>
             <a href="user-list.php">User List</a>
-            <a href="user-add.php">Add Customer</a>
+            <a href="add-user.php">Add Customer</a>
             <a href="order.php">Shopping</a>
             <a href="return.php">Return</a>
-            <!-- Add more links as needed for other pages -->
         </nav>
     </header>
 
     <div id="user-list-container">
-        <h1>Suburban Outfitters - User List</h1>
-        <form action="user-details.php" method="get">
-            <select name="user_id">
-                <option value="">Select a User</option>
-                <?php
-                // Check if there are rows returned
-                if ($result->num_rows > 0) {
-                    // Output data of each row
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<option value='{$row["user_id"]}'>{$row["forename"]} {$row["surname"]}</option>";
-                    }
-                } else {
-                    echo "<option value=''>No users found</option>";
-                }
-                ?>
-            </select>
-            <button type="submit">View Details</button>
-        </form>
-        <!-- Add button to navigate to user-add.php -->
-        <a href="user-add.php">Add Customer</a>
-    </div>
+        <h1>User List - Suburban Outfitters</h1>
+_END;
 
+$query = "SELECT * FROM users";
+$result = $conn->query($query);
+if (!$result) die($conn->error);
+
+$rows = $result->num_rows;
+for ($j = 0; $j < $rows; $j++) {
+    $result->data_seek($j);
+    $row = $result->fetch_array(MYSQLI_BOTH);
+
+    echo <<<_END
+    <div class="user-name">
+        <a href='user-details.php?user_id=$row[user_id]'>$row[forename] $row[surname]</a>
+        <form action="delete-user.php" method="post">
+            <input type="hidden" name="user_id" value="$row[user_id]">
+            <input type="submit" value="Delete User">
+        </form>
+           <div id="admin-options">
+        <p>ADMIN:</p>
+        <a href="user-add.php">Add User</a>
+    </div>
+    </div>
+_END;
+}
+
+$result->close();
+$conn->close();    
+
+echo <<<_END
+    </div>
     <footer>
         <div id="footer-container">
             <div id="contact-footer">
@@ -128,8 +156,16 @@ $result = $conn->query($query);
             <div id="copyright">
                 <p>&copy; 2024 SUBURBAN OUTFITTERS Retail, LLC. All Rights Reserved.</p>
             </div>
+           
+
         </div>
     </footer>
+    
+    
 </body>
 
 </html>
+_END;
+
+?>
+

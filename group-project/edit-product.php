@@ -7,6 +7,8 @@ $page_roles=array('admin');
 require_once 'login.php';
 require_once 'checksession.php';
 
+$conn = new mysqli($hn, $un, $pw, $db);
+if ($conn->connect_error) die($conn->connect_error);
 
 if(isset($_GET['product_id'])) {
     // Get the product ID from the URL
@@ -76,7 +78,7 @@ $conn->close();
     <header>
         <nav>
             <a href="about.php">About</a>
-            <a href="login-form.php">Login</a>
+            <a href="authenticate.php">Login</a>
             <a href="user-list.php">User List</a>
             <a href="user-add.php">Add Customer</a>
             <a href="order.php">Shopping</a>

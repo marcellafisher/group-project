@@ -126,12 +126,17 @@ for ($j = 0; $j < $rows; $j++) {
     echo <<<_END
     <div class="product-item">
         <p>Product ID: $row[product_id]</p>
-        <p>Name: $row[name]</p>
+        <p>Name:<a href='edit-product.php?product_id=$row[product_id]'> $row[name]</a> </p> 
         <p>Price: $row[price]</p>
         <form action="add-to-cart.php" method="post">
             <input type="hidden" name="product_id" value="$row[product_id]">
             <input type="submit" value="Add to Cart">
         </form>
+         <form action="delete-product.php" method="post">
+            <input type="hidden" name="product_id" value="$row[product_id]">
+            <input type="submit" value="Delete Product">
+        </form>
+
     </div>
 _END;
 }
@@ -145,8 +150,6 @@ echo <<<_END
     <div id="admin-options">
         <p>ADMIN:</p>
         <a href="add-product.php">Add Product</a>
-        <a href="edit-product.php">Edit Product</a>
-        <a href="delete-product.php">Delete Product</a>
     </div>
 
     <footer>

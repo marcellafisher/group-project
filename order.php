@@ -4,19 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suburban Outfitters</title>
+    <title>Create Order - Suburban Outfitters</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
-            background: url('graffiti.jpeg') no-repeat center center fixed;
+            background: url('shopping.jpeg') no-repeat center center fixed;
             background-size: cover;
             margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
         }
 
         header {
             background-color: #333;
             padding: 10px;
             text-align: center;
+            width: 100%;
         }
 
         nav {
@@ -24,6 +29,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 5px;
+            width: 100%;
         }
 
         nav a {
@@ -38,22 +44,41 @@
             font-size: 1.5rem;
         }
 
-        #homepage-container {
+        #product-create-container {
             background-color: rgba(255, 255, 255, 0.8);
             padding: 20px;
             border-radius: 10px;
-            width: 300px;
             text-align: center;
-            margin: 20px auto; /* Center the container horizontally */
+            margin: 20px auto;
+            max-width: 300px;
         }
 
-        h1,
-        p {
-            color: #333;
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
 
         a {
             color: #333;
+            display: block;
+            margin-top: 10px;
             text-decoration: none;
         }
     </style>
@@ -63,21 +88,33 @@
     <header>
         <nav>
             <a href="about.php">About</a>
-            <a href="login-form.php">Login</a>
+            <a href="authenticate.php">Login</a>
             <a href="user-list.php">User List</a>
             <a href="user-add.php">Add Customer</a>
             <a href="order.php">Shopping</a>
             <a href="return.php">Return</a>
             <a href="total-sales.php">Total Sales</a>
-            <!-- Add more links as needed for other pages -->
         </nav>
     </header>
 
-    <div id="homepage-container">
-        <h1>Welcome to Suburban Outfitters</h1>
-        <p>Discover the latest trends in streetwear fashion. Explore our collection and make your fashion statement.</p>
-    </div>
+    <div id="product-create-container">
+        <h1>Create New Order</h1>
+        <form action="view-product.php" method="post">
+            <label for="product-category">Choose a Product Category:</label>
+            <select id="product-category" name="productCategory" required>
+                <option value="pants">Pants</option>
+                <option value="shirt">Shirt</option>
+                <option value="shoes">Shoes</option>
+            </select>
 
+            <!-- Additional form fields based on the selected category -->
+            <!-- ... -->
+
+            <button type="submit">View Product</button>
+        </form>
+        <a href="about.php">Back to About</a>
+    </div>
+    
     <footer>
         <div id="footer-container">
             <div id="contact-footer">
@@ -93,4 +130,3 @@
 </body>
 
 </html>
-

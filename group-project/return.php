@@ -6,7 +6,7 @@ $page_roles = array('admin','customer');
 require_once 'login.php';
 require_once 'checksession.php';
 
-?>
+
 
 // Connect to the database
 $conn = new mysqli($hn, $un, $pw, $db);

@@ -1,3 +1,13 @@
+<?php
+
+$page_roles = array('admin','customer');
+
+// Include the database connection file
+require_once 'login.php';
+require_once 'checksession.php';
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -87,12 +97,14 @@
 <body>
     <header>
         <nav>
-            <a href="about.php">About</a>
+           <a href="about.php">About</a>
             <a href="authenticate.php">Login</a>
             <a href="user-list.php">User List</a>
             <a href="user-add.php">Add Customer</a>
             <a href="order.php">Shopping</a>
             <a href="return.php">Return</a>
+            <a href="cart.php">Cart</a>
+            <a href="logout.php">Logout</a>
         </nav>
     </header>
 

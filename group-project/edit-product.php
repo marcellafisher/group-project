@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if update was successful
     if ($update_result) {
         // Redirect to order.php after successful update
-        header("Location: order.php");
+        header("Location: view-product.php");
         exit();
     } else {
         // Display error message if update fails
@@ -70,7 +70,21 @@ $conn->close();
     <title>Edit Return - Suburban Outfitters</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Your CSS styles here */
+        body {
+            background: url('sun.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+     }
+
+        #edit-product-container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+
     </style>
 </head>
 
@@ -80,9 +94,12 @@ $conn->close();
             <a href="about.php">About</a>
             <a href="authenticate.php">Login</a>
             <a href="user-list.php">User List</a>
-            <a href="user-add.php">Add Customer</a>
+            <a href="add-user.php">Add Customer</a>
             <a href="order.php">Shopping</a>
             <a href="return.php">Return</a>
+            <a href="cart.php">Cart</a>
+            <a href="total-sales.php">Total Sales</a>
+            <a href="logout.php">Logout</a>
             <!-- Add more links as needed for other pages -->
         </nav>
     </header>

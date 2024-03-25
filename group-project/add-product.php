@@ -121,9 +121,11 @@ $conn->close();
             <a href="about.php">About</a>
             <a href="authenticate.php">Login</a>
             <a href="user-list.php">User List</a>
-            <a href="user-add.php">Add Customer</a>
+            <a href="add-user.php">Add Customer</a>
             <a href="order.php">Shopping</a>
             <a href="return.php">Return</a>
+            <a href="total-sales.php">Total Sales</a>
+            <a href="logout.php">Logout</a>
             <!-- Add more links as needed for other pages -->
         </nav>
     </header>

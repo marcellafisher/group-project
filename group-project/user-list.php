@@ -104,12 +104,14 @@ echo <<<_END
 <body>
     <header>
         <nav>
-            <a href="about.php">About</a>
+             <a href="about.php">About</a>
             <a href="authenticate.php">Login</a>
             <a href="user-list.php">User List</a>
-            <a href="add-user.php">Add Customer</a>
+            <a href="user-add.php">Add Customer</a>
             <a href="order.php">Shopping</a>
             <a href="return.php">Return</a>
+            <a href="total-sales.php">Total Sales</a>
+            <a href="logout.php">Logout</a>            
         </nav>
     </header>
 
@@ -133,10 +135,10 @@ for ($j = 0; $j < $rows; $j++) {
             <input type="hidden" name="user_id" value="$row[user_id]">
             <input type="submit" value="Delete User">
         </form>
-           <div id="admin-options">
-        <p>ADMIN:</p>
-        <a href="user-add.php">Add User</a>
-    </div>
+        <form action="edituser.php" method="get">
+            <input type="hidden" name="user_id" value="$row[user_id]">
+            <button type="submit">Edit User</button>
+        </form>
     </div>
 _END;
 }
@@ -168,4 +170,3 @@ echo <<<_END
 _END;
 
 ?>
-

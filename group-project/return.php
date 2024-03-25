@@ -1,6 +1,12 @@
 <?php
+
+$page_roles = array('admin','customer');
+
 // Include the database connection file
 require_once 'login.php';
+require_once 'checksession.php';
+
+?>
 
 // Connect to the database
 $conn = new mysqli($hn, $un, $pw, $db);
@@ -129,6 +135,7 @@ $conn->close();
             <a href="user-add.php">Add Customer</a>
             <a href="order.php">Shopping</a>
             <a href="return.php">Return</a>
+            <a href="logout.php">Logout</a>
         </nav>
     </header>
 
@@ -146,9 +153,7 @@ $conn->close();
 
             <button type="submit">Submit Return</button>
         </form>
-        <a href="edit-return.php">Edit Return</a>
         <a href="view-return.php">View Return</a>
-        <a href="cancel-return.php">Cancel Return</a>
     </div>
 
     <footer>

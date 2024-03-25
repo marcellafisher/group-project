@@ -1,11 +1,18 @@
 <?php
 
+$page_roles = array('admin','customer');
+
+// Include the database connection file
 require_once 'login.php';
+require_once 'checksession.php';
 
 $conn = new mysqli($hn, $un, $pw, $db);
 if ($conn->connect_error) die($conn->connect_error);
 
+
 echo <<<_END
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -107,12 +114,16 @@ echo <<<_END
             <a href="add-user.php">Add Customer</a>
             <a href="order.php">Shopping</a>
             <a href="return.php">Return</a>
+            <a href="cart.php">Cart</a>
+            <a href="logout.php">Logout</a>
         </nav>
     </header>
 
     <div id="product-list-container">
         <h1>Product List - Suburban Outfitters</h1>
 _END;
+
+
 
 $query = "SELECT * FROM products";
 $result = $conn->query($query);

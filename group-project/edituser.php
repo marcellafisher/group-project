@@ -1,3 +1,82 @@
+<?php
+
+$page_roles = array('admin');
+
+// Include the database connection file
+require_once 'login.php';
+require_once 'checksession.php';
+
+$conn = new mysqli($hn, $un, $pw, $db);
+if ($conn->connect_error) die($conn->connect_error);
+
+if (isset($_GET['user_id'])) {
+    // Get the user ID from the URL
+    $user_id = $_GET['user_id'];
+
+    // Fetch user data from the database
+    $query = "SELECT * FROM users WHERE user_id = $user_id";
+    $result = $conn->query($query);
+
+    // Check if query executed successfully
+    if (!$result) {
+        die("Error executing query: " . $conn->error);
+    }
+
+    // Check if user data is found
+    if ($result->num_rows == 1) {
+        // Fetch user details
+        $user = $result->fetch_assoc();
+    } else {
+        // User not found
+        echo "<p>User not found.</p>";
+        exit(); // Stop further execution
+    }
+} else {
+    // User ID not provided
+    echo "<p>User ID not provided.</p>";
+    exit(); // Stop further execution
+}
+
+// Check if form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Collect form data
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $forename = $_POST['forename'];
+    $surname = $_POST['surname'];
+    $shirt_size = $_POST['shirt_size'];
+    $pant_size = $_POST['pant_size'];
+    $shoe_size = $_POST['shoe_size'];
+    $address = $_POST['address'];
+
+    // Update user data in the database
+    $update_query = "UPDATE users SET 
+                        username = '$username', 
+                        password = '$password', 
+                        forename = '$forename', 
+                        surname = '$surname', 
+                        shirt_size = '$shirt_size', 
+                        pant_size = '$pant_size', 
+                        shoe_size = '$shoe_size', 
+                        address = '$address' 
+                    WHERE user_id = $user_id";
+    $update_result = $conn->query($update_query);
+
+    // Check if update was successful
+    if ($update_result) {
+        // Redirect to user-list.php after successful update
+        header("Location: user-list.php");
+        exit();
+    } else {
+        // Display error message if update fails
+        echo "Error updating user: " . $conn->error;
+    }
+}
+
+// Close the database connection
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,12 +110,8 @@
             color: #fff;
             text-decoration: none;
             margin: 0 10px;
-            font-size: 14px; /* Adjust the font size as needed */
+            font-size: 14px;
             font-weight: bold;
-        }
-
-        #navbar-logo {
-            font-size: 1.5rem;
         }
 
         #edit-user-container {
@@ -45,8 +120,8 @@
             border-radius: 10px;
             width: 300px;
             text-align: center;
-            margin: auto; /* Center the container */
-            margin-top: 20px; /* Adjust the top margin as needed */
+            margin: auto;
+            margin-top: 20px;
         }
 
         form {
@@ -88,82 +163,40 @@
             <a href="user-add.php">Add Customer</a>
             <a href="order.php">Shopping</a>
             <a href="return.php">Return</a>
+            <a href="total-sales.php">Total Sales</a>
+            <a href="logout.php">Logout</a>
+            
             <!-- Add more links as needed for other pages -->
         </nav>
     </header>
 
     <div id="edit-user-container">
         <h1>Edit User - Suburban Outfitters</h1>
-        <!-- User selection form -->
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-            <select name="selected_user">
-                <option value="">Select a User</option> <!-- Add a default option -->
-                <?php
-                // Include the database connection file
-                require_once 'login.php';
-
-                // Connect to the database
-                $conn = new mysqli($hn, $un, $pw, $db);
-
-                // Check for database connection errors
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);
-                }
-
-                // Retrieve list of users from the database
-                $query = "SELECT id, username FROM users";
-                $result = $conn->query($query);
-
-                // Check if the query was successful
-                if ($result && $result->num_rows > 0) {
-                    // Display each user as an option in the dropdown
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<option value='" . $row['id'] . "'";
-                        if ($selectedUser == $row['id']) {
-                            echo " selected";
-                        }
-                        echo ">" . $row['username'] . "</option>";
-                    }
-                }
-                ?>
-            </select>
-            <button type="submit">Select User</button>
-        </form>
-
         <!-- User editing form -->
-        <form action="update-user.php" method="post">
-            <!-- Display selected user details -->
-            <p>Customer Name: <?php echo $customerEmail; ?></p>
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?user_id=" . $user_id); ?>" method="post">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" value="<?php echo $user['username']; ?>" required>
 
-            <!-- Include editable user fields -->
-            <input type="hidden" name="userId" value="<?php echo $selectedUser; ?>">
-            <input type="email" name="customerEmail" placeholder="Email" value="<?php echo $customerEmail; ?>" required>
-            <input type="text" name="shirtSize" placeholder="Shirt Size" value="<?php echo $shirtSize; ?>">
-            <input type="text" name="pantSize" placeholder="Pant Size" value="<?php echo $pantSize; ?>">
-            <input type="text" name="shoeSize" placeholder="Shoe Size" value="<?php echo $shoeSize; ?>">
-            <input type="text" name="shippingAddress" placeholder="Shipping Address" value="<?php echo $shippingAddress; ?>" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" value="<?php echo $user['password']; ?>" required>
 
-            <button type="submit">Update User</button>
-        </form>
-        
-        <a href="user-list.php">Cancel</a>
-    </div>
+            <label for="forename">Forename:</label>
+            <input type="text" id="forename" name="forename" value="<?php echo $user['forename']; ?>" required>
 
-    <footer>
-        <div id="footer-container">
-            <div id="contact-footer">
-                <h2>Contact Us</h2>
-                <p>Email: info@suburbanoutfitters.com</p>
-                <p>Phone: (555) 123-4567</p>
-            </div>
-            <div id="copyright">
-                <p>&copy; 2024 SUBURBAN OUTFITTERS Retail, LLC. All Rights Reserved.</p>
-            </div>
-        </div>
-    </footer>
-</body>
+            <label for="surname">Surname:</label>
+            <input type="text" id="surname" name="surname" value="<?php echo $user['surname']; ?>" required>
 
-</html>
+            <label for="shirt_size">Shirt Size:</label>
+            <input type="text" id="shirt_size" name="shirt_size" value="<?php echo $user['shirt_size']; ?>" required>
 
+              <label for="pant_size">Pant Size:</label>
+             <input type="text" id="pant_size" name="pant_size" value="<?php echo $user['pant_size']; ?>" required>
 
+            <label for="shoe_size">Shoe Size:</label>
+             <input type="text" id="shoe_size" name="shoe_size" value="<?php echo $user['shoe_size']; ?>" required>
 
+          <label for="address">Address:</label>
+          <input type="text" id="address" name="address" value="<?php echo $user['address']; ?>" required>
+
+         <button type="submit">Update User</button>
+</form>

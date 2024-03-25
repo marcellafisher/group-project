@@ -1,4 +1,8 @@
 <?php
+
+$page_roles = array('admin');
+
+// Include the database connection file
 require_once 'login.php';
 
 // Connect to the database

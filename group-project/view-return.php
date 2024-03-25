@@ -1,3 +1,13 @@
+<?php
+
+$page_roles = array('admin','customer');
+
+// Include the database connection file
+require_once 'login.php';
+require_once 'checksession.php';
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -88,12 +98,13 @@
             <a href="user-add.php">Add Customer</a>
             <a href="order.php">Shopping</a>
             <a href="return.php">Return</a>
+            <a href="logout.php">Logout</a>
         </nav>
     </header>
 
-    <div id="view-return-container">
+   <div id="view-return-container">
         <h1>View Return</h1>
-        <form action="view-return2.php" method="get"> <!-- Change method to "get" -->
+        <form action="view-return2.php" method="get">
             <label for="return_id">Select Return ID:</label>
             <select name="return_id" id="return_id" required>
                 <option value="">Select a Return</option>
@@ -124,8 +135,17 @@
             </select>
             <button type="submit">View Details</button>
         </form>
+
+        <?php if (isset($_GET['return_id'])) : ?>
+            <!-- Add buttons to go to edit-return and cancel-return -->
+            <?php $return_id = $_GET['return_id']; ?>
+            <a href="edit-return.php?return_id=<?php echo $return_id; ?>"><button>Edit Return</button></a>
+            <a href="cancel-return.php?return_id=<?php echo $return_id; ?>"><button>Cancel Return</button></a>
+        <?php endif; ?>
+
         <a href="return.php">Back to Returns</a>
     </div>
+
     
     <footer>
         <div id="footer-container">
@@ -142,5 +162,3 @@
 </body>
 
 </html>
-
-

@@ -125,7 +125,7 @@ require_once 'checksession.php';
 
             <button type="submit">Update Return</button>
         </form>
-        <a href="return.php">Cancel</a>
+        <a href="view-return.php">Cancel</a>
     </div>
 
     <footer>

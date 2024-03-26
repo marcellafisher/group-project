@@ -6,45 +6,39 @@ require_once 'login.php';
 require_once 'checksession.php';
 
 // Check if the form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Collect form data
-    $category = $_POST['category'];
-    $name = $_POST['name'];
-    $size = $_POST['size'];
-    $color = $_POST['color'];
-    $price = $_POST['price'];
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['name'])) {
+    // Extracting and sanitizing input
+    $name = $conn->real_escape_string($_POST['name']);
+    $category = $conn->real_escape_string($_POST['category']);
+    $size = $conn->real_escape_string($_POST['size']);
+    $color = $conn->real_escape_string($_POST['color']);
+    $price = $conn->real_escape_string($_POST['price']);
+    $quantity = $conn->real_escape_string($_POST['quantity']);
 
-    // Prepare and execute SQL query to insert product data into the database
-    $query = "INSERT INTO products (category, name, size, color, price) 
-              VALUES ('$category', '$name', '$size', '$color', '$price')";
+    $sql1 = "INSERT INTO `products` (`category`, `name`, `size`, `color`, `price`) VALUES ('$category', '$name', '$size', '$color', '$price')";
+    $conn->query($sql1);
+    echo $conn->error;
+    $product_id = $conn->insert_id;
 
-    $result = $conn->query($query);
+    $sql2 = "INSERT INTO `inventory` (`product_id`, `date`, `quantity`, `cost`) VALUES ($product_id, '2024-01-01', $quantity, '10.00')";
+    $conn->query($sql2);
 
-    // Check if insertion was successful
-    if ($result) {
-        // Redirect back to order.php after adding the product
-        header("Location: view-product.php");
-        exit();
-    } else {
-        echo "Error: " . $query . "<br>" . $conn->error;
-    }
+    header("Location: view-inventory.php");
+
+    $conn->close();
 }
-
-// Close the database connection
-$conn->close();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suburban Outfitters - Add Product</title>
+    <title>Add Inventory</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
-            background: url('sun.jpeg') no-repeat center center fixed;
+            background: url('inventory.jpeg') no-repeat center center fixed;
             background-size: cover;
             margin: 0;
         }
@@ -66,12 +60,8 @@ $conn->close();
             color: #fff;
             text-decoration: none;
             margin: 0 10px;
-            font-size: 14px; /* Adjust the font size as needed */
+            font-size: 14px;
             font-weight: bold;
-        }
-
-        #navbar-logo {
-            font-size: 1.5rem;
         }
 
         #user-add-container {
@@ -80,8 +70,8 @@ $conn->close();
             border-radius: 10px;
             width: 300px;
             text-align: center;
-            margin: auto; /* Center the container */
-            margin-top: 20px; /* Adjust the top margin as needed */
+            margin: auto;
+            margin-top: 20px;
         }
 
         form {
@@ -112,9 +102,7 @@ $conn->close();
             text-decoration: none;
         }
     </style>
-
 </head>
-
 <body>
     <header>
         <nav>
@@ -126,32 +114,34 @@ $conn->close();
             <a href="return.php">Return</a>
             <a href="total-sales.php">Total Sales</a>
             <a href="logout.php">Logout</a>
-            <!-- Add more links as needed for other pages -->
         </nav>
     </header>
 
     <div id="user-add-container">
-        <h1>Suburban Outfitters - Add Product</h1>
-        <!-- Form for adding product -->
+        <h1>Add New Product and Inventory</h1>
+        <!-- Form for adding inventory -->
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-            <label for="category">Category:</label>
-            <input type="text" id="category" name="category" placeholder="Category" required>
-
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" placeholder="Name" required>
 
+            <label for="category">Category:</label>
+            <input type="text" id="category" name="category" placeholder="Category" required>
+
             <label for="size">Size:</label>
-            <input type="text" id="size" name="size" placeholder="Size">
+            <input type="text" id="size" name="size" placeholder="Size" required>
 
             <label for="color">Color:</label>
-            <input type="text" id="color" name="color" placeholder="Color">
+            <input type="text" id="color" name="color" placeholder="Color" required>
 
             <label for="price">Price:</label>
             <input type="number" id="price" name="price" placeholder="Price" required>
 
-            <button type="submit">Add Product</button>
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" placeholder="Quantity" required>
+
+            <button type="submit">Add Inventory</button>
         </form>
-        <a href="view-product.php">Cancel</a>
+        <a href="view-inventory.php">Cancel</a>
     </div>
 
     <footer>
@@ -167,6 +157,4 @@ $conn->close();
         </div>
     </footer>
 </body>
-
 </html>
-

@@ -125,7 +125,7 @@ $conn->close();
 
             <button type="submit">Update Product</button>
         </form>
-        <a href="order.php">Cancel</a>
+        <a href="view-product.php">Cancel</a>
     </div>
     
   <footer>        <div id="footer-container">

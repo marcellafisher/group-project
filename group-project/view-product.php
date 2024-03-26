@@ -23,7 +23,7 @@ echo <<<_END
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
-            background: url('back.avif') no-repeat center center fixed;
+            background: url('sun.jpeg') no-repeat center center fixed;
             background-size: cover;
             margin: 0;
         }
@@ -161,6 +161,7 @@ echo <<<_END
     <div id="admin-options">
         <p>ADMIN:</p>
         <a href="add-product.php">Add Product</a>
+        <a href="view-inventory.php">View Inventory</a> <!-- New Link to View Inventory -->
     </div>
 
     <footer>
